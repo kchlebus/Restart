@@ -170,6 +170,7 @@ fileprivate struct FooterView: View {
                         }
                         .onEnded { gesture in
                             if buttonOffset > buttonWidth / 2 {
+                                play(sound: "chimeup", type: "mp3")
                                 buttonOffset = buttonWidth - 80
                                 isOnboardingViewActive = false
                             } else {
