@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OnboardingView: View {
     @State private var isAnimating: Bool = false
+    @State private var textTitle: String = "Share."
 
     var body: some View {
         ZStack {
@@ -16,8 +17,8 @@ struct OnboardingView: View {
                 .ignoresSafeArea(.all, edges: .all)
             VStack(spacing: 20) {
                 Spacer()
-                HeaderView(isAnimating: $isAnimating)
-                CenterView(isAnimating: $isAnimating)
+                HeaderView(isAnimating: $isAnimating, textTitle: $textTitle)
+                CenterView(isAnimating: $isAnimating, textTitle: $textTitle)
                 Spacer()
                 FooterView(isAnimating: $isAnimating)
             }
@@ -36,12 +37,16 @@ struct OnboardingView_Previews: PreviewProvider {
 
 fileprivate struct HeaderView: View {
     @Binding var isAnimating: Bool
+    @Binding var textTitle: String
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("Share.")
+            Text(textTitle)
                 .font(.system(size: 60))
+                .fontWeight(.bold)
                 .foregroundStyle(.white)
+                .transition(.opacity)
+                .id(textTitle) // optional, was a bug in previous version of the SDK
             Text("""
                 It's not how much we give but
                 how much love we put into giving.
@@ -60,6 +65,7 @@ fileprivate struct HeaderView: View {
 
 fileprivate struct CenterView: View {
     @Binding var isAnimating: Bool
+    @Binding var textTitle: String
     @State private var imageOffset: CGSize = .zero
     @State private var indicatorOpacity: Double = 1.0
 
@@ -85,12 +91,14 @@ fileprivate struct CenterView: View {
                             }
                             withAnimation(.linear(duration: 0.25)) {
                                 indicatorOpacity = 0
+                                textTitle = "Give."
                             }
                         }
                         .onEnded { _ in
                             imageOffset = .zero
                             withAnimation(.linear(duration: 0.25)) {
                                 indicatorOpacity = 1
+                                textTitle = "Share."
                             }
                         }
                 )
