@@ -20,7 +20,7 @@ struct OnboardingView: View {
                 HeaderView(isAnimating: $isAnimating, textTitle: $textTitle)
                 CenterView(isAnimating: $isAnimating, textTitle: $textTitle)
                 Spacer()
-                FooterView(isAnimating: $isAnimating)
+                SlideButtonView(isAnimating: $isAnimating)
             }
         }
         .preferredColorScheme(.dark)
@@ -121,7 +121,7 @@ fileprivate struct CenterView: View {
     }
 }
 
-fileprivate struct FooterView: View {
+fileprivate struct SlideButtonView: View {
     @AppStorage("onboarding") private var isOnboardingViewActive: Bool = true
     @State private var buttonWidth: Double = UIScreen.main.bounds.width - 80
     @State private var buttonOffset: CGFloat = 0
