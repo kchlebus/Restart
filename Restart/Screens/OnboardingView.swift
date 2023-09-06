@@ -127,6 +127,8 @@ fileprivate struct FooterView: View {
     @State private var buttonOffset: CGFloat = 0
     @Binding var isAnimating: Bool
 
+    let hapticFeedback = UINotificationFeedbackGenerator()
+
     var body: some View {
         ZStack {
             // 1. BACKGROUND (STATIC)
@@ -170,10 +172,12 @@ fileprivate struct FooterView: View {
                         }
                         .onEnded { gesture in
                             if buttonOffset > buttonWidth / 2 {
+                                hapticFeedback.notificationOccurred(.success)
                                 play(sound: "chimeup", type: "mp3")
                                 buttonOffset = buttonWidth - 80
                                 isOnboardingViewActive = false
                             } else {
+                                hapticFeedback.notificationOccurred(.warning)
                                 buttonOffset = 0
                             }
                         }
