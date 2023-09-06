@@ -23,6 +23,7 @@ struct OnboardingView: View {
                 FooterView(isAnimating: $isAnimating)
             }
         }
+        .preferredColorScheme(.dark)
         .onAppear {
             isAnimating = true
         }
