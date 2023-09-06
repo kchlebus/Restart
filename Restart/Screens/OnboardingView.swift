@@ -61,10 +61,15 @@ fileprivate struct HeaderView: View {
 fileprivate struct CenterView: View {
     @Binding var isAnimating: Bool
     @State private var imageOffset: CGSize = .zero
+    @State private var indicatorOpacity: Double = 1.0
 
     var body: some View {
         ZStack {
             CircleGroupView(shapeColor: .white, shapeOpacity: 0.2)
+                .offset(x: imageOffset.width * -1)
+                .blur(radius: abs(imageOffset.width / 5))
+                .animation(.easeOut(duration: 1), value: imageOffset)
+
             Image("character-1")
                 .resizable()
                 .scaledToFit()
@@ -78,12 +83,31 @@ fileprivate struct CenterView: View {
                             if abs(imageOffset.width) <= 150 {
                                 imageOffset = gesture.translation
                             }
+                            withAnimation(.linear(duration: 0.25)) {
+                                indicatorOpacity = 0
+                            }
                         }
                         .onEnded { _ in
                             imageOffset = .zero
+                            withAnimation(.linear(duration: 0.25)) {
+                                indicatorOpacity = 1
+                            }
                         }
                 )
                 .animation(.easeOut(duration: 1), value: imageOffset)
+        }
+        .overlay(alignment: .bottom) {
+            Image(systemName: "arrow.left.and.right.circle")
+                .font(.system(size: 44, weight: .ultraLight))
+                .foregroundColor(.white)
+                .offset(y: 20)
+                .opacity(isAnimating ? 1 : 0)
+                .animation(
+                    .easeOut(duration: 1)
+                    .delay(2),
+                    value: isAnimating
+                )
+                .opacity(indicatorOpacity)
         }
     }
 }
